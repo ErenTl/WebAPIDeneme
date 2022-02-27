@@ -69,8 +69,13 @@ namespace WebAPIDeneme.Controllers
                 using (NpgsqlCommand myCommand = new NpgsqlCommand(query, myCon))
                 {
                     myCommand.Parameters.AddWithValue("@movieTitle", mov.movieTitle);
-                    myCommand.Parameters.AddWithValue("@releaseDate", mov.releaseDate);
-                    myCommand.Parameters.AddWithValue("@imdbRank", mov.imdbRank);
+
+                    if (mov.releaseDate != DateTime.Parse("0001-01-01T00:00:00")) { myCommand.Parameters.AddWithValue("@releaseDate", mov.releaseDate); }
+                    else { myCommand.Parameters.AddWithValue("@releaseDate", DBNull.Value); }
+
+                    if(mov.imdbRank!=0.0m) { myCommand.Parameters.AddWithValue("@imdbRank", mov.imdbRank); } else 
+                    { myCommand.Parameters.AddWithValue("@imdbRank", DBNull.Value); }
+
                     myReader = myCommand.ExecuteReader();
                     table.Load(myReader);
 
